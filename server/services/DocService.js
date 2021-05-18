@@ -12,6 +12,16 @@ class DocService{
         }
     }
 
+    static async findOneDoc(req, res){
+        const { id } = req.params;
+        const where = {id: Number(id)}
+        try{
+            const doc = await database.Doc.findOne({where})
+        }catch(e){
+            res.status(500).json({message: `não foi encontrado a documentação com o id ${id}`})
+        }
+    }
+
     //Post
     static async createDoc(req, res){
         const doc = req.body;
