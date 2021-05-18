@@ -14,11 +14,12 @@ class DocService{
 
     static async findOneDoc(req, res){
         const { id } = req.params;
-        const where = {id: Number(id)}
+        const where = {where: {id: Number(id)}}
         try{
-            const doc = await database.Doc.findOne({where})
+            const doc = await database.Doc.findOne(where)
+            return res.status(200).json(doc);
         }catch(e){
-            res.status(500).json({message: `não foi encontrado a documentação com o id ${id}`})
+            return res.status(500).json(e.message);
         }
     }
 
@@ -29,7 +30,18 @@ class DocService{
             const createdDoc = database.Doc.create(doc);
             return res.status(201).json(createdDoc);
         }catch(error){
-            res.status(400).json(error.message);
+            return res.status(400).json(error.message);
+        }
+    }
+
+    static async updateDoc(req, res){
+        const {id} = req.params;
+        const doc = req.body;
+        try{
+            const docUpdated = await database.Doc.update(doc, {where: {id: Number(id)}})
+            return res.status(200).json(docUpdated);
+        }catch(e){
+            return res.status(400).json(e.message);
         }
     }
 
